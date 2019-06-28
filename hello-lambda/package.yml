@@ -7,5 +7,5 @@ Resources:
       Handler: main
       FunctionName: main
       Runtime: go1.x
-      CodeUri: s3://sam-test-fukui-190628/lambda-go-sample/3a40050742d8315c70c87f9935de2b45
+      CodeUri: s3://sam-test-fukui-190628/lambda-go-sample/5d90cde603755dc19b62476998320a5e
       Timeout: 300

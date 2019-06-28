@@ -7,10 +7,14 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func HandleRequest(ctx context.Context, name string) (string, error) {
-	return fmt.Sprintf("Oh.. Hello %s!", name), nil
+type Event struct {
+	Name string `json:"name"`
+}
+
+func handler(ctx context.Context, event Event) (string, error) {
+	return fmt.Sprintf("Oh.. Hello %s!", event.Name), nil
 }
 
 func main() {
-	lambda.Start(HandleRequest)
+	lambda.Start(handler)
 }

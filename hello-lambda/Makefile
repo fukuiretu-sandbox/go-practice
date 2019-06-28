@@ -1,3 +1,5 @@
+.PHONY: clean build deploy
+
 S3_BUCKET := sam-test-fukui-190628
 REGION := ap-northeast-1
 TEMPLATE_FILE := template.yml
@@ -11,7 +13,7 @@ deps:
 clean:
 	rm -rf dest/main
 
-build:
+build: clean
 	env GOARCH="amd64" GOOS="linux" go build -o dest/main
 
 package:
@@ -22,8 +24,8 @@ package:
 		--output-template-file $(PACKAGE_FILE) \
 		--profile $(PROFILE)
 
-deploy:
-	sam deploy
+deploy: build package
+	sam deploy \
 		--template-file $(PACKAGE_FILE) \
 		--stack-name  $(STACK_NAME) \
 		--region $(REGION) \
