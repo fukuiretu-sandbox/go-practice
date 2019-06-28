@@ -1,0 +1,11 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  App:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main
+      FunctionName: main
+      Runtime: go1.x
+      CodeUri: s3://sam-test-fukui-190628/lambda-go-sample/3a40050742d8315c70c87f9935de2b45
+      Timeout: 300

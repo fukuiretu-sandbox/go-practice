@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: 'AWS::Serverless-2016-10-31'
+
+Resources:
+#   Bucket:
+#       Type: AWS::S3::Bucket
+
+  App:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: main
+      FunctionName: main
+      Runtime: go1.x
+      CodeUri: dest
+      Timeout: 300
+    #   Role: arn:aws:iam::542729990194:role/CloudFormationTest
+    #   Policies:
+    #     - CloudFormationDescribeStacksPolicy: {}
+    #     - S3CrudPolicy:
+    #         BucketName:
