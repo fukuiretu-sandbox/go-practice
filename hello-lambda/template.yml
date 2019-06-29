@@ -11,7 +11,7 @@ Resources:
       Handler: main
       FunctionName: main
       Runtime: go1.x
-      CodeUri: dest
+      CodeUri: dist
       Timeout: 300
     #   Role: arn:aws:iam::542729990194:role/CloudFormationTest
     #   Policies:

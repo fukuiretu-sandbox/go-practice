@@ -14,7 +14,7 @@ clean:
 	rm -rf dest/main
 
 build: clean
-	env GOARCH="amd64" GOOS="linux" go build -o dest/main
+	env GOARCH="amd64" GOOS="linux" go build -o dist/main
 
 package:
 	sam package \
@@ -31,6 +31,9 @@ deploy: build package
 		--region $(REGION) \
 		--profile  $(PROFILE) \
 		--capabilities CAPABILITY_IAM
+
+invoke:
+	sam local invoke App --event event.json
 
 tail:
 	saw watch /aws/lambda/main \
