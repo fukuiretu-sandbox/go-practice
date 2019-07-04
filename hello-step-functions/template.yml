@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  StepFunctions example
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 300
+    Handler: main
+    Runtime: go1.x
+
+Resources:
+
+##          ###    ##     ## ########  ########     ###
+##         ## ##   ###   ### ##     ## ##     ##   ## ##
+##        ##   ##  #### #### ##     ## ##     ##  ##   ##
+##       ##     ## ## ### ## ########  ##     ## ##     ##
+##       ######### ##     ## ##     ## ##     ## #########
+##       ##     ## ##     ## ##     ## ##     ## ##     ##
+######## ##     ## ##     ## ########  ########  ##     ##
+# More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  SampleSettingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SampleSetting
+      CodeUri: src/sample_setting/dist
+  SampleAdditionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SampleAddition
+      CodeUri: src/sample_addition/dist
+  SampleMultiplyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SampleMultiply
+      CodeUri: src/sample_multiply/dist
+
+######  ######## ######## ########     ######## ##     ## ##    ##  ######  ######## ####  #######  ##    ##
+##    ##    ##    ##       ##     ##    ##       ##     ## ###   ## ##    ##    ##     ##  ##     ## ###   ##
+##          ##    ##       ##     ##    ##       ##     ## ####  ## ##          ##     ##  ##     ## ####  ##
+######     ##    ######   ########     ######   ##     ## ## ## ## ##          ##     ##  ##     ## ## ## ##
+      ##    ##    ##       ##           ##       ##     ## ##  #### ##          ##     ##  ##     ## ##  ####
+##    ##    ##    ##       ##           ##       ##     ## ##   ### ##    ##    ##     ##  ##     ## ##   ###
+######     ##    ######## ##           ##        #######  ##    ##  ######     ##    ####  #######  ##    ##
+
+  EasyCalcStepFunctionsStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: EasyCalcStepFunctionsStateMachine
+      RoleArn: arn:aws:iam::600507852733:role/StepFunctionsServiceRole
+      DefinitionString:
+        Fn::Sub: |
+          {
+            "Comment": "簡単な計算をするフロー",
+            "StartAt": "TaskInitialSetting",
+            "Version": "1.0",
+            "TimeoutSeconds": 300,
+            "States": {
+              "TaskInitialSetting": {
+                "Comment": "初期の値を設定します",
+                "Type": "Task",
+                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:SampleSetting",
+                "InputPath": "$",
+                "ResultPath": "$.SettingResult",
+                "OutputPath": "$",
+                "Next": "TaskAddition"
+              },
+              "TaskAddition": {
+                "Comment": "足し算をおこないます",
+                "Type": "Task",
+                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:SampleAddition",
+                "InputPath": "$",
+                "ResultPath": "$.AdditionResult",
+                "OutputPath": "$",
+                "Next": "TaskMultiply"
+              },
+              "TaskMultiply": {
+                "Comment": "掛け算をおこないます",
+                "Type": "Task",
+                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:SampleMultiply",
+                "InputPath": "$",
+                "ResultPath": "$.MultiplyResult",
+                "OutputPath": "$",
+                "End": true
+              }
+            }
+          }
