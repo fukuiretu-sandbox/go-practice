@@ -29,9 +29,16 @@ func main() {
 	fmt.Printf("%v\n", dice)
 
 	// NOTE: ポインタの例
-	var a foo
+	a := &foo{v: 2}
 	a.add(3)
 	println("a.v:", a.v)
 	a.add(4)
+	println("a.v:", a.v)
+
+	// NOTE: &foo{}と式new(foo)は等価
+	a = new(foo)
+	a.add(9)
+	println("a.v:", a.v)
+	a.add(1)
 	println("a.v:", a.v)
 }
